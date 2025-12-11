@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: ai-tech-support-system
+    
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:sk-your-key}
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.7
+      embedding:
+        options:
+          model: text-embedding-3-small
+          
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: tech-support-group
+      auto-offset-reset: earliest
+      max-poll-records: 10
+    producer:
+      acks: all
+
+server:
+  port: 8080
+
+qdrant:
+  host: http://localhost:6333
+  api-key: qdrant-key
+  collection: tech_support_kb
+
+langfuse:
+  public-key: ${LANGFUSE_PUBLIC_KEY:pk-lf-dev}
+  secret-key: ${LANGFUSE_SECRET_KEY:sk-lf-dev}
+  host: http://localhost:3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    root: INFO
+    "[com.techsupport]": DEBUG
+    "[org.springframework.ai]": DEBUG
